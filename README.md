@@ -1,7 +1,7 @@
 
 # RSpec: let and let! (CoffeeOrder & Cafe Edition)
 
-Welcome to Lesson 7! If you’ve ever wondered, “Is there a better way to set up test data than using instance variables everywhere?”—let us introduce you to `let` and `let!`. These RSpec helpers are like the secret agents of your test suite: they show up only when you need them, keep your specs clean, and sometimes even surprise you with their cleverness. All examples use CoffeeOrder and Cafe for clarity and realism.
+If you’ve ever wondered, “Is there a better way to set up test data than using instance variables everywhere?”—let us introduce you to `let` and `let!`. These RSpec helpers are like the secret agents of your test suite: they show up only when you need them, keep your specs clean, and sometimes even surprise you with their cleverness. All examples use CoffeeOrder and Cafe for clarity and realism.
 
 ---
 
