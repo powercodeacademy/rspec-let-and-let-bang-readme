@@ -1,6 +1,7 @@
-# RSpec: let and let!: Lazy, Powerful, and a Little Mysterious
 
-Welcome to Lesson 7! If you’ve ever wondered, “Is there a better way to set up test data than using instance variables everywhere?”—let us introduce you to `let` and `let!`. These RSpec helpers are like the secret agents of your test suite: they show up only when you need them, keep your specs clean, and sometimes even surprise you with their cleverness. Let’s break down what they do, how they work, and why you’ll love them (with lots of examples and clarifications, of course).
+# RSpec: let and let! (CoffeeOrder & Cafe Edition)
+
+Welcome to Lesson 7! If you’ve ever wondered, “Is there a better way to set up test data than using instance variables everywhere?”—let us introduce you to `let` and `let!`. These RSpec helpers are like the secret agents of your test suite: they show up only when you need them, keep your specs clean, and sometimes even surprise you with their cleverness. All examples use CoffeeOrder and Cafe for clarity and realism.
 
 ---
 
@@ -27,18 +28,18 @@ Enter `let` and `let!`: these helpers make your specs cleaner, clearer, and more
 #### Using Instance Variables (the old way)
 
 ```ruby
-# /spec/calculator_spec.rb
-RSpec.describe Calculator do
+# /spec/coffee_order_spec.rb
+RSpec.describe CoffeeOrder do
   before(:each) do
-    @calculator = Calculator.new
+    @order = CoffeeOrder.new('Latte', 'medium')
   end
 
-  it "adds numbers" do
-    expect(@calculator.add(2, 3)).to eq(5)
+  it "returns the drink name" do
+    expect(@order.drink).to eq('Latte')
   end
 
-  it "subtracts numbers" do
-    expect(@calculator.subtract(5, 2)).to eq(3)
+  it "returns the size" do
+    expect(@order.size).to eq('medium')
   end
 end
 ```
@@ -46,16 +47,16 @@ end
 #### Using *let* (the modern way)
 
 ```ruby
-# /spec/calculator_spec.rb
-RSpec.describe Calculator do
-  let(:calculator) { Calculator.new }
+# /spec/coffee_order_spec.rb
+RSpec.describe CoffeeOrder do
+  let(:order) { CoffeeOrder.new('Latte', 'medium') }
 
-  it "adds numbers" do
-    expect(calculator.add(2, 3)).to eq(5)
+  it "returns the drink name" do
+    expect(order.drink).to eq('Latte')
   end
 
-  it "subtracts numbers" do
-    expect(calculator.subtract(5, 2)).to eq(3)
+  it "returns the size" do
+    expect(order.size).to eq('medium')
   end
 end
 ```
@@ -71,21 +72,22 @@ Notice how `let` makes it clear that `calculator` is a helper method, not a myst
 #### Example: Overriding *let* in a context
 
 ```ruby
-# /spec/calculator_spec.rb
-RSpec.describe Calculator do
-  let(:calculator) { Calculator.new }
+# /spec/coffee_order_spec.rb
+RSpec.describe CoffeeOrder do
+  let(:order) { CoffeeOrder.new('Latte', 'medium') }
 
-  context "with default calculator" do
-    it "adds numbers" do
-      expect(calculator.add(1, 2)).to eq(3)
+  context "with a default order" do
+    it "returns the drink name" do
+      expect(order.drink).to eq('Latte')
     end
   end
 
-  context "with a special calculator" do
-    let(:calculator) { SpecialCalculator.new }
+  context "with a special order" do
+    let(:order) { CoffeeOrder.new('Mocha', 'large') }
 
-    it "adds numbers differently" do
-      expect(calculator.add(1, 2)).to eq(42) # SpecialCalculator is weird!
+    it "returns the drink name and size" do
+      expect(order.drink).to eq('Mocha')
+      expect(order.size).to eq('large')
     end
   end
 end
@@ -97,12 +99,12 @@ Try doing that with instance variables—it gets messy fast!
 
 ```ruby
 RSpec.describe "let resolution" do
-  let(:thing) { "outer" }
+  let(:drink) { "Latte" }
   context "outer context" do
-    # thing == "outer"
+    # drink == "Latte"
     context "inner context" do
-      let(:thing) { "inner" }
-      # thing == "inner" (overrides outer)
+      let(:drink) { "Mocha" }
+      # drink == "Mocha" (overrides outer)
     end
   end
 end
@@ -115,12 +117,12 @@ Resolution order: RSpec looks for the closest let in the current context, then m
 With `let`, the value isn’t created until you actually use it in your test. This can make your specs faster and easier to understand. **Bonus:** The value is memoized—multiple calls to the same `let` in a single example return the same object.
 
 ```ruby
-# /spec/calculator_spec.rb
-RSpec.describe Calculator do
-  let(:calculator) { Calculator.new }
+# /spec/coffee_order_spec.rb
+RSpec.describe CoffeeOrder do
+  let(:order) { CoffeeOrder.new('Latte', 'medium') }
 
   it "returns the same object each time in an example" do
-    expect(calculator).to equal(calculator) # true: memoized!
+    expect(order).to equal(order) # true: memoized!
   end
 end
 ```
@@ -132,12 +134,12 @@ Notice: No `@calculator`! The `let(:calculator)` line creates a method called `c
 Sometimes you want your setup code to run before each example, no matter what. That’s what `let!` is for. **Warning:** If you use `let!` to set up heavy or slow objects (like database records), it can slow down your test suite—only use it when you really need eager setup.
 
 ```ruby
-# /spec/user_spec.rb
-RSpec.describe User do
-  let!(:user) { User.create(name: "Alice") }
+# /spec/coffee_order_spec.rb
+RSpec.describe CoffeeOrder do
+  let!(:order) { CoffeeOrder.new('Latte', 'medium') }
 
-  it "finds the user by name" do
-    expect(User.find_by(name: "Alice")).to eq(user)
+  it "returns the drink name" do
+    expect(order.drink).to eq('Latte')
   end
 end
 ```
@@ -206,12 +208,36 @@ While `let` and `let!` are the best choice for most test data, there are a few s
 
 In summary: use `let` and `let!` for most test data, but reach for `before(:all)` and instance variables for expensive, one-time setup, or when you truly need shared state. When in doubt, prefer `let`—it’s almost always the right choice!
 
-## Practice Prompts
+## Getting Hands-On
 
-1. Refactor a spec that uses `before` and instance variables to use `let` instead. What changes?
-2. Try using `let!` to set up a database record. What happens if you don’t reference it in your test?
-3. Write a spec with nested contexts that override a `let` value. How does RSpec decide which value to use?
-4. Why is lazy evaluation useful in testing? Write your answer in your own words.
+Ready to practice? Here’s how to get started:
+
+1. **Fork and clone this repo to your own GitHub account.**
+2. **Install dependencies:**
+
+    ```zsh
+    bundle install
+    ```
+
+3. **Run the specs:**
+
+    ```zsh
+    bin/rspec
+    ```
+
+4. **Explore the code:**
+
+   - All lesson code uses the CoffeeOrder and Cafe domain (see `lib/` and `spec/let_spec.rb`).
+   - Review the examples for using `let` and `let!` in different ways.
+
+5. **Implement the pending specs:**
+
+   - Open `spec/let_spec.rb` and look for specs marked as `pending`.
+   - Implement the real methods in `lib/coffee_order.rb` or `lib/cafe.rb` as needed so the pending specs pass.
+
+6. **Re-run the specs** to verify your changes!
+
+**Challenge:** Try writing your own spec using `let` or `let!` for a new method on CoffeeOrder or Cafe.
 
 ---
 
