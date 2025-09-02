@@ -127,7 +127,7 @@ RSpec.describe CoffeeOrder do
 end
 ```
 
-Notice: No `@calculator`! The `let(:calculator)` line creates a method called `calculator` you can use in your tests. The value is only created once per example.
+Notice: No `@order`! The `let(:order)` line creates a method called `order` you can use in your tests. The value is only created once per example.
 
 ## let!: Eager Evaluation (and a Caution)
 
