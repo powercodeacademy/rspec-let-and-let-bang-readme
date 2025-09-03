@@ -51,18 +51,18 @@ RSpec.describe 'let and let! with CoffeeOrder and Cafe' do
     expect(prepared_order.prepared?).to eq(true)
   end
 
-  it 'has a pending spec for students: override let for a large Mocha order' do
-    pending('Override let to create a large Mocha order and test its drink and size')
-    raise 'Not implemented'
-    # let(:order) { CoffeeOrder.new('Mocha', 'large') }
-    # expect(order.drink).to eq('Mocha')
-    # expect(order.size).to eq('large')
+  context 'when overriding drink order in nested context' do
+    let(:order) { CoffeeOrder.new('Mocha', 'large') }
+    it 'override let for a large Mocha order' do
+      expect(order.drink).to eq('Mocha')
+      expect(order.size).to eq('large')
+    end
   end
 
-  it 'has a pending spec for students: use let! to serve an order and check status' do
-    pending('Use let! to serve an order before the example and test that status is :served')
-    raise 'Not implemented'
-    # let!(:served_order) { order.serve; order }
-    # expect(served_order.status).to eq(:served)
+  context 'when overriding let! is nested context' do
+    let!(:served_order) { order.serve; order }
+    it 'use let! to serve an order and check status' do
+      expect(served_order.status).to eq(:served)
+    end
   end
 end
