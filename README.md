@@ -143,7 +143,7 @@ RSpec.describe CoffeeOrder do
 end
 ```
 
-Here, `let!` ensures the user is created before each test, even if you don’t reference `user` in the example.
+Here, `let!` ensures the order is created before each test, even if you don’t reference `order` in the example.
 
 ## let vs let!: What’s the Difference?
 
