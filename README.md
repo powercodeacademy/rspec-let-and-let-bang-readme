@@ -1,7 +1,6 @@
-
 # RSpec: let and let! (CoffeeOrder & Cafe Edition)
 
-If you’ve ever wondered, “Is there a better way to set up test data than using instance variables everywhere?”—let us introduce you to `let` and `let!`. These RSpec helpers are like the secret agents of your test suite: they show up only when you need them, keep your specs clean, and sometimes even surprise you with their cleverness. All examples use CoffeeOrder and Cafe for clarity and realism.
+If you’ve ever wondered, “Is there a better way to set up test data than using instance variables everywhere?”—let us introduce you to `let` and `let!`. These RSpec helpers are like the secret agents of your test suite: they show up only when you need them, keep your specs clean, and sometimes even surprise you with their cleverness.
 
 ---
 
@@ -11,7 +10,7 @@ Let’s get real: instance variables (`@thing`) are the old-school way to share 
 
 - **Always set up, even if you don’t use them.** This can slow down your tests and make it unclear what’s actually needed for each example.
 - **Accidental reuse or pollution.** If you change an instance variable in one test, it might affect another (especially with `before(:all)`).
-- **Harder to read.** It’s not always obvious where `@calculator` or `@user` came from, especially in big specs.
+- **Harder to read.** It’s not always obvious where `@order` or `@user` came from, especially in big specs.
 
 Enter `let` and `let!`: these helpers make your specs cleaner, clearer, and more efficient. Here’s a quick comparison:
 
@@ -61,7 +60,7 @@ RSpec.describe CoffeeOrder do
 end
 ```
 
-Notice how `let` makes it clear that `calculator` is a helper method, not a mysterious variable. It’s only created if you use it in the test, which keeps things fast and focused.
+Notice how `let` makes it clear that `order` is a helper method, not a mysterious variable. It’s only created if you use it in the test, which keeps things fast and focused.
 
 ### More Benefits of *let*/*let!*
 
@@ -215,26 +214,24 @@ Ready to practice? Here’s how to get started:
 1. **Fork and clone this repo to your own GitHub account.**
 2. **Install dependencies:**
 
-    ```zsh
-    bundle install
-    ```
+   ```zsh
+   bundle install
+   ```
 
 3. **Run the specs:**
 
-    ```zsh
-    bin/rspec
-    ```
+   ```zsh
+   bin/rspec
+   ```
 
 4. **Explore the code:**
 
    - All lesson code uses the CoffeeOrder and Cafe domain (see `lib/` and `spec/let_spec.rb`).
    - Review the examples for using `let` and `let!` in different ways.
-
 5. **Implement the pending specs:**
 
    - Open `spec/let_spec.rb` and look for specs marked as `pending`.
    - Implement the real methods in `lib/coffee_order.rb` or `lib/cafe.rb` as needed so the pending specs pass.
-
 6. **Re-run the specs** to verify your changes!
 
 **Challenge:** Try writing your own spec using `let` or `let!` for a new method on CoffeeOrder or Cafe.
